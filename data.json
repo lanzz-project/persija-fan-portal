@@ -1,8 +1,9 @@
 {
-  "updated_at": "2026-09-12T00:00:00Z",
+  "updated_at": "2026-09-12T12:55:25.047178+00:00",
   "source": {
     "news": "https://www.persija.id/all-news",
-    "matches": "https://www.sofascore.com/football/team/persija-jakarta/64295"
+    "matches": "https://www.sofascore.com/api/v1/team/64295/events/next/0",
+    "standings": null
   },
   "news": [
     {
