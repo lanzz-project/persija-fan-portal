@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090909">
+<meta name="description" content="Persija × The Jakmania Ultimate Fan Portal — live dashboard, history, squad, music, and interactive fan experience.">
+<title>PERSIJA × THE JAKMANIA — Ultimate Fan Portal</title>
+<style>
+:root{
+  --red:#e50914;--red2:#ff3340;--black:#050505;--panel:#101114;--panel2:#17181d;
+  --white:#f7f7f7;--muted:#a9abb4;--gold:#d8ad55;--line:rgba(255,255,255,.09);
+  --shadow:0 20px 70px rgba(0,0,0,.45);--radius:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:
+radial-gradient(circle at 15% 5%,rgba(229,9,20,.18),transparent 28rem),
+radial-gradient(circle at 90% 18%,rgba(216,173,85,.10),transparent 24rem),
+#050505;color:var(--white);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.08;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 85%);z-index:-1}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+button{cursor:pointer}
+.container{width:min(1180px,92%);margin:auto}
+.topbar{height:38px;background:#080808;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:#bbb;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.topbar b{color:var(--gold)}
+nav{position:sticky;top:0;z-index:50;background:rgba(5,5,5,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.navin{height:76px;display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:12px;min-width:250px}
+.brand img{width:44px;height:52px;object-fit:contain}
+.brand strong{font-size:15px;letter-spacing:.08em}
+.brand span{display:block;color:var(--gold);font-size:10px;letter-spacing:.14em;margin-top:3px}
+.links{display:flex;gap:5px;flex:1;justify-content:center}
+.links a{padding:10px 12px;border-radius:12px;color:#c7c7c7;font-size:12px;font-weight:700}
+.links a:hover,.links a.active{background:rgba(229,9,20,.13);color:#fff;box-shadow:inset 0 -2px var(--red)}
+.navbtn{border:1px solid var(--line);background:#111;color:#fff;padding:11px 13px;border-radius:13px}
+.hero{padding:58px 0 30px}
+.heroGrid{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:stretch}
+.heroMain{position:relative;overflow:hidden;min-height:450px;border:1px solid rgba(229,9,20,.28);border-radius:30px;padding:42px;background:
+linear-gradient(135deg,rgba(229,9,20,.23),transparent 45%),linear-gradient(180deg,#15151a,#080808);box-shadow:var(--shadow)}
+.heroMain:after{content:"JAK";position:absolute;right:-20px;bottom:-80px;font-size:260px;font-weight:1000;color:rgba(255,255,255,.025);line-height:1}
+.kicker{display:inline-flex;gap:8px;align-items:center;color:var(--gold);font-size:11px;font-weight:900;letter-spacing:.18em;text-transform:uppercase}
+.dot{width:7px;height:7px;background:var(--red2);border-radius:50%;box-shadow:0 0 16px var(--red)}
+h1{font-size:clamp(42px,7vw,82px);line-height:.9;letter-spacing:-.06em;margin:20px 0}
+h1 span{color:var(--red2)}
+.heroText{max-width:690px;color:#c8c8ce;font-size:16px;line-height:1.7}
+.heroActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.btn{border:1px solid var(--line);padding:13px 17px;border-radius:14px;font-weight:800;background:#15161a;color:#fff;transition:.2s}
+.btn:hover{transform:translateY(-2px);border-color:rgba(229,9,20,.5)}
+.btn.primary{background:linear-gradient(135deg,#f21b27,#a9000a);border:0;box-shadow:0 12px 35px rgba(229,9,20,.24)}
+.heroSide{display:grid;gap:16px}
+.clockCard,.nextCard{background:linear-gradient(180deg,#15161a,#0b0c0e);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow)}
+.clock{font-size:38px;font-weight:900;letter-spacing:-.05em;margin:10px 0}
+.date{color:#aaa;font-size:13px}
+.cardLabel{color:var(--gold);font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.matchTeams{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0}
+.team{text-align:center;flex:1}.team img{height:72px;max-width:100px;object-fit:contain}.team b{display:block;margin-top:8px;font-size:13px}.vs{font-weight:1000;color:#666}
+.countdown{font-size:26px;font-weight:900;color:#fff}
+.status{display:inline-block;margin-top:8px;padding:6px 9px;border-radius:999px;background:rgba(229,9,20,.12);color:#ff6870;font-size:10px;font-weight:900}
+section{padding:42px 0}
+.sectionHead{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:20px}
+.sectionHead h2{font-size:31px;letter-spacing:-.04em}.sectionHead p{color:#8f929b;font-size:13px;max-width:540px;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:linear-gradient(180deg,#121318,#0b0c0e);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 15px 45px rgba(0,0,0,.24);transition:.25s}
+.card:hover{transform:translateY(-4px);border-color:rgba(229,9,20,.3)}
+.newsCard{min-height:220px;display:flex;flex-direction:column;justify-content:space-between}
+.tag{display:inline-block;font-size:10px;font-weight:900;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.newsCard h3{font-size:20px;line-height:1.18}.newsCard p{color:#999da6;font-size:13px;line-height:1.6;margin-top:10px}
+.meta{display:flex;justify-content:space-between;color:#777;font-size:11px;margin-top:18px}
+.matchHero{display:grid;grid-template-columns:1fr .8fr;gap:18px}
+.scoreBox{display:flex;align-items:center;justify-content:center;min-height:280px;text-align:center}
+.score{font-size:74px;font-weight:1000;letter-spacing:-.07em}
+.liveBadge{color:#fff;background:var(--red);padding:6px 10px;border-radius:999px;font-size:10px;font-weight:900;display:inline-block;margin-bottom:10px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.stat{background:#0b0c0e;border:1px solid var(--line);border-radius:15px;padding:14px}.stat b{font-size:22px}.stat span{display:block;color:#777;font-size:10px;text-transform:uppercase;margin-top:3px}
+.teamGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.player{position:relative;overflow:hidden;padding:0;min-height:160px}.player .num{position:absolute;right:12px;top:8px;color:rgba(255,255,255,.08);font-size:52px;font-weight:1000}.player .avatar{height:95px;background:linear-gradient(135deg,rgba(229,9,20,.2),transparent);display:flex;align-items:end;justify-content:center;font-size:54px}.player .info{padding:12px}.player small{color:#777}.player b{display:block;margin-top:3px}
+.timeline{display:grid;gap:12px}.timelineItem{display:grid;grid-template-columns:95px 1fr;gap:15px;align-items:start}.year{color:var(--gold);font-weight:1000}.timelineItem .line{border-left:2px solid rgba(229,9,20,.4);padding:0 0 18px 18px}.timelineItem h3{font-size:17px}.timelineItem p{color:#92959d;font-size:13px;line-height:1.6;margin-top:5px}
+.music{display:grid;grid-template-columns:1fr 1fr;gap:16px}.musicCard{padding:20px}.musicTop{display:flex;align-items:center;gap:15px}.disc{width:66px;height:66px;border-radius:50%;background:radial-gradient(circle,#222 0 18%,#e50914 19% 23%,#151515 24% 44%,#d8ad55 45% 48%,#151515 49%);box-shadow:0 0 25px rgba(229,9,20,.2)}.musicCard.playing .disc{animation:spin 4s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.musicCard h3{font-size:17px}.musicCard p{color:#777;font-size:12px;margin-top:4px}.controls{display:flex;gap:8px;margin-top:18px}.iconbtn{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:#111;color:#fff}.play{background:var(--red);border:0}.progress{height:5px;background:#26272c;border-radius:99px;margin-top:16px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--gold))}
+.lyrics{margin-top:15px;padding:14px;border-radius:14px;background:#0b0b0c;color:#9fa2ab;font-size:12px;line-height:1.8;max-height:120px;overflow:auto}
+.social{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.social a{display:flex;align-items:center;gap:15px}.socialIcon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#18191e;font-weight:1000}
+.searchBox{display:flex;gap:10px;margin-bottom:16px}.searchBox input{flex:1;background:#0e0f12;border:1px solid var(--line);color:#fff;border-radius:14px;padding:13px 15px;outline:none}.searchBox input:focus{border-color:rgba(229,9,20,.6)}
+footer{border-top:1px solid var(--line);margin-top:30px;padding:35px 0 50px;color:#777;font-size:12px}.footerGrid{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.credit{color:#ddd}.gold{color:var(--gold)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#15161a;border:1px solid var(--line);padding:12px 16px;border-radius:13px;box-shadow:var(--shadow);z-index:100;font-size:12px;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+#topBtn{position:fixed;right:18px;bottom:18px;display:none;width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:#111;color:#fff;z-index:40}
+@media(max-width:900px){.heroGrid,.matchHero,.music{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.teamGrid{grid-template-columns:repeat(2,1fr)}.links{display:none}.brand{min-width:0}.navin{justify-content:space-between}}
+@media(max-width:580px){.hero{padding-top:28px}.heroMain{padding:27px;min-height:420px}h1{font-size:49px}.grid,.social{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.sectionHead{display:block}.sectionHead p{margin-top:8px}.teamGrid{grid-template-columns:repeat(2,1fr)}.brand strong{font-size:12px}.brand img{width:37px;height:45px}}
+
+<style>
+.autoBar{margin:12px 0 18px;padding:10px 12px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.035);display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:#aaa}
+.autoBar b{color:#fff;letter-spacing:.08em}.autoDot{width:8px;height:8px;border-radius:50%;background:#31d07c;box-shadow:0 0 14px #31d07c;display:inline-block}
+.autoBar .btn{margin-left:auto;padding:7px 10px}
+.liveDataBadge{display:inline-flex;align-items:center;gap:6px;font-size:10px;padding:5px 8px;border-radius:999px;background:rgba(232,28,45,.12);border:1px solid rgba(232,28,45,.25);color:#ff8790}
+
+<style>
+.liveGrid{display:grid;grid-template-columns:1.2fr 1.2fr .8fr .8fr;gap:16px}
+.liveGrid .card{min-height:190px}
+.cardTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.muted{color:#888;font-size:12px}
+.liveScore{display:flex;align-items:center;justify-content:center;gap:18px;text-align:center;padding:14px 0}
+.liveTeam{font-weight:800;font-size:16px;max-width:130px}.liveScoreNum{font-size:32px;font-weight:950;letter-spacing:.05em}
+.liveStatus{font-size:11px;color:#aaa;margin-top:5px}
+.tableWrap{overflow:auto}.standings{width:100%;border-collapse:collapse;font-size:11px}.standings th,.standings td{padding:7px 5px;border-bottom:1px solid rgba(255,255,255,.07);text-align:left}.standings th:nth-child(n+3),.standings td:nth-child(n+3){text-align:center}.standings tr.persija{background:rgba(232,28,45,.13);font-weight:800}
+.scorer{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07)}.scorer:last-child{border-bottom:0}.scorerName{font-weight:700}.scorerGoals{font-weight:950;font-size:18px}
+.formStrip{display:flex;gap:8px;justify-content:center;align-items:center;height:100px}.formPill{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:rgba(255,255,255,.08)}
+.eventStats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.eventStat{padding:8px;border:1px solid rgba(255,255,255,.07);border-radius:10px;text-align:center;font-size:11px}.eventStat b{display:block;font-size:15px;margin-bottom:2px}
+@media(max-width:1050px){.liveGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.liveGrid{grid-template-columns:1fr}.liveScoreNum{font-size:27px}}
+</style>
+</style>
+</style>
+
+<style id="total-upgrade">
+:root{
+  --red:#e30613;--red2:#ff2633;--black:#030303;--panel:#0d0f13;--panel2:#15171c;
+  --white:#f7f7f7;--muted:#9ca0aa;--gold:#e8bd62;--gold2:#fff0b0;
+  --line:rgba(255,255,255,.10);--glow:rgba(230,6,19,.34);
+  --shadow:0 24px 90px rgba(0,0,0,.58);--radius:24px
+}
+body{background:
+ radial-gradient(circle at 10% 0%,rgba(230,6,19,.23),transparent 32rem),
+ radial-gradient(circle at 90% 12%,rgba(232,189,98,.13),transparent 26rem),
+ linear-gradient(120deg,#020202,#08090b 48%,#030303);background-attachment:fixed}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:.035;
+ background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 4px);mix-blend-mode:overlay}
+.topbar{background:linear-gradient(90deg,#080808,#16080a,#080808)}
+nav{box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.navbtn,.btn,.iconbtn{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease,background .25s ease}
+.navbtn:hover,.btn:hover,.iconbtn:hover{box-shadow:0 10px 35px rgba(230,6,19,.16)}
+.hero{padding-top:72px}
+.heroMain{background:
+ radial-gradient(circle at 90% 20%,rgba(232,189,98,.11),transparent 18rem),
+ linear-gradient(135deg,rgba(230,6,19,.28),transparent 45%),linear-gradient(180deg,#17191e,#070709);
+ animation:heroIn .8s ease both}
+.heroMain:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.08),transparent 60%);
+ transform:translateX(-120%);animation:sweep 7s ease-in-out infinite}
+.heroMain:after{content:"PERSIJA";right:-40px;bottom:-35px;font-size:120px;letter-spacing:-.08em;transform:rotate(-8deg)}
+.kicker{filter:drop-shadow(0 0 12px rgba(232,189,98,.18))}
+h1{text-shadow:0 18px 50px rgba(0,0,0,.55)}
+.card,.clockCard,.nextCard{position:relative;overflow:hidden}
+.card:before,.clockCard:before,.nextCard:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.07),transparent 28%,transparent 72%,rgba(230,6,19,.06));pointer-events:none}
+.card:hover{box-shadow:0 25px 65px rgba(0,0,0,.42),0 0 0 1px rgba(230,6,19,.12)}
+.scoreBox{background:
+ radial-gradient(circle at center,rgba(230,6,19,.11),transparent 48%),linear-gradient(180deg,#121419,#08090b)}
+.score{font-size:clamp(42px,6vw,74px);text-shadow:0 0 35px rgba(230,6,19,.14)}
+.liveBadge{box-shadow:0 0 25px rgba(230,6,19,.3);animation:pulse 1.8s infinite}
+.team img{filter:drop-shadow(0 12px 20px rgba(0,0,0,.45))}
+.player{transform-style:preserve-3d}
+.player .avatar{background:radial-gradient(circle at 50% 100%,rgba(230,6,19,.24),transparent 65%),linear-gradient(135deg,rgba(230,6,19,.18),transparent)}
+.playerSvg,.opponentBadge{display:grid;place-items:center;width:70px;height:70px;border-radius:50%;
+ border:2px solid rgba(232,189,98,.45);background:radial-gradient(circle,#262626,#090909);
+ color:var(--gold);font-weight:1000;letter-spacing:.05em;box-shadow:0 0 30px rgba(232,189,98,.12)}
+.opponentBadge{width:58px;height:58px;margin:auto;color:#fff;border-color:rgba(255,255,255,.2);background:linear-gradient(135deg,#191a1d,#070707)}
+.svgIcon{display:inline-grid;place-items:center;font-size:1em;line-height:1}
+.musicCard.playing{border-color:rgba(230,6,19,.55);box-shadow:0 0 45px rgba(230,6,19,.14)}
+.disc{border:1px solid rgba(232,189,98,.25)}
+.socialIcon{border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+.socialIcon:after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(230,6,19,.22),transparent)}
+.searchBox{position:sticky;top:90px;z-index:10;padding:8px;background:rgba(3,3,3,.58);backdrop-filter:blur(14px);border-radius:18px}
+.progress{cursor:pointer}
+.toast{backdrop-filter:blur(15px)}
+#topBtn{box-shadow:0 12px 35px rgba(0,0,0,.35)}
+#particleCanvas{position:fixed;inset:0;pointer-events:none;z-index:1}
+main,footer,nav,.topbar{position:relative;z-index:2}
+#ambient{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(230,6,19,.08),transparent 20rem);transition:background .2s}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+.sectionHead h2{position:relative}
+.sectionHead h2:after{content:"";display:block;width:52px;height:3px;margin-top:9px;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:99px}
+@keyframes heroIn{from{opacity:0;transform:translateY(20px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes sweep{0%,55%{transform:translateX(-120%)}75%,100%{transform:translateX(120%)}}
+@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(230,6,19,0),0 0 30px rgba(230,6,19,.45)}}
+@media(max-width:580px){.searchBox{top:72px}.hero{padding-top:35px}.heroMain:after{font-size:72px}.card{border-radius:18px}}
+</style>
+
+</head>
+<body><div id="ambient"></div><canvas id="particleCanvas"></canvas>
+<div class="topbar">FAN-MADE PORTAL <b>•</b> Bukan situs resmi Persija / The Jakmania <b>•</b> Dibuat oleh Lanzz</div>
+
+<nav>
+  <div class="container navin">
+    <a class="brand" href="#home">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Logo_Persija_ok.png" alt="Logo Persija">
+      <div><strong>PERSIJA × JAKMANIA</strong><span>FAN PORTAL BY LANZZ</span></div>
+    </a>
+    <div class="links">
+      <a href="#home">HOME</a><a href="#live-dashboard">LIVE CENTER</a></li><li><a href="#news">NEWS</a><a href="#match">MATCH</a><a href="#team">TEAM</a><a href="#jakmania">JAKMANIA</a><a href="#music">MUSIC</a><a href="#features">HUB</a>
+    </div>
+    <button class="navbtn" onclick="toggleEffects()"><span class="svgIcon">✦</span> FX</button>
+  </div>
+</nav>
+
+<main id="home">
+<section class="hero">
+<div class="container heroGrid">
+  <div class="heroMain">
+    <div class="kicker"><i class="dot"></i> JAKARTA • PERSIJA • 1928</div>
+    <h1>MACAN<br><span>KEMAYORAN.</span></h1>
+    <p class="heroText">Portal fan-made besar untuk Persija Jakarta & The Jakmania. Dibangun sebagai proyek personal Lanzz dengan nuansa merah, hitam, putih, emas, dashboard modern, data pertandingan, berita, sejarah, musik, dan fitur interaktif.</p>
+    <div class="heroActions">
+      <a class="btn primary" href="#match"><span class="svgIcon">⚽</span> MATCH CENTER</a>
+      <a class="btn" href="https://www.persija.id/" target="_blank" rel="noopener"><span class="svgIcon">↗</span> PERSIJA.ID</a>
+      <a class="btn" href="https://www.instagram.com/infokomjakmania/" target="_blank" rel="noopener"><span class="svgIcon">◎</span> THE JAKMANIA</a>
+    </div>
+  </div>
+  <div class="heroSide">
+    <div class="clockCard">
+      <div class="cardLabel">Waktu Jakarta / WIB</div>
+      <div class="clock" id="clock">--:--:--</div>
+      <div class="date" id="date">Memuat tanggal...</div>
+      <div class="status">● LIVE CLOCK</div>
+    </div>
+    <div class="nextCard">
+      <div class="cardLabel">Match snapshot • Super League 2026/27</div>
+      <div class="matchTeams">
+        <div class="team"><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Logo_Persija_ok.png" alt="Persija"><b>PERSIJA</b></div>
+        <div class="vs">VS</div>
+        <div class="team"><div style="font-size:45px"><span class="opponentBadge">P</span></div><b>PERSIB</b></div>
+      </div>
+      <div class="countdown" id="countdown">--</div>
+      <div style="color:#777;font-size:11px;margin-top:5px">12 September 2026 • 15:30 WIB • SUGBK</div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<section id="live-dashboard" class="section">
+  <div class="sectionHead">
+    <div><span class="eyebrow">LIVE DATA</span><h2>COMMAND CENTER <span>2.0</span></h2></div>
+    <p>Skor, klasemen, statistik, lineup & pemain diperbarui otomatis.</p>
+  </div>
+  <div class="liveGrid">
+    <article class="card liveMatchCard">
+      <div class="cardTop"><span class="tag">LIVE MATCH</span><span id="liveState" class="liveDataBadge">SYNC</span></div>
+      <div id="liveMatch"><div class="muted">Menunggu data pertandingan…</div></div>
+    </article>
+    <article class="card">
+      <div class="cardTop"><span class="tag">KLASEMEN</span><span class="muted">SUPER LEAGUE</span></div>
+      <div class="tableWrap"><table class="standings"><thead><tr><th>#</th><th>Klub</th><th>MP</th><th>GD</th><th>PTS</th></tr></thead><tbody id="standingsBody"><tr><td colspan="5">Memuat…</td></tr></tbody></table></div>
+    </article>
+    <article class="card">
+      <div class="cardTop"><span class="tag">TOP SCORER</span><span class="muted">PERSIJA</span></div>
+      <div id="scorers"><div class="muted">Memuat…</div></div>
+    </article>
+    <article class="card">
+      <div class="cardTop"><span class="tag">FORM</span><span class="muted">5 MATCH</span></div>
+      <div id="formStrip" class="formStrip"></div>
+    </article>
+  </div>
+</section>
+
+<section id="news">
+<div class="container">
+<div class="sectionHead"><div><div class="kicker">LATEST SIGNAL</div><h2>Berita & Update</h2></div><p>Snapshot awal diisi dari sumber resmi Persija yang tersedia saat pembuatan versi ini. Tombol sumber membuka halaman resmi agar info terbaru tetap bisa diverifikasi.</p></div>
+<div class="searchBox"><input id="search" placeholder="Cari berita, pemain, The Jakmania..." oninput="filterCards()"><button class="btn" onclick="resetSearch()">Reset</button></div>
+<div class="autoBar">
+  <span class="autoDot"></span>
+  <b>AUTO UPDATE</b>
+  <span id="autoStatus">Menghubungkan ke data live…</span>
+  <button class="btn" onclick="forceAutoUpdate()">↻ Refresh</button>
+</div>
+<div class="grid" id="newsGrid"><article class="card newsCard"><div><span class="tag">AUTO</span><h3>Memuat berita terbaru Persija…</h3><p>Data akan diambil otomatis dari feed yang dikonfigurasi.</p></div></article></div>
+    <div class="meta"><span>09 Sep 2026</span><a href="https://www.persija.id/media/news/tekad-persija-hadirkan-versi-terbaiknya-untuk-hadapi-pekan-kedua" target="_blank">Sumber ↗</a></div>
+  </article>
+  <article class="card newsCard" data-search="ivan mamut transfer persija striker kroasia 2026">
+    <div><span class="tag">SQUAD</span><h3>Ivan Mamut resmi menjadi bagian Persija</h3><p>Striker Kroasia itu bergabung untuk menghadapi tantangan Super League 2026/2027 dan 2027/2028.</p></div>
+    <div class="meta"><span>10 Sep 2026</span><a href="https://www.persija.id/media/news/persija-bersama-ivan-mamut-siap-hadapi-tantangan-super-league-20262027" target="_blank">Sumber ↗</a></div>
+  </article>
+  <article class="card newsCard" data-search="borneo persija alexander jeremejeff nadeo kemenangan 1 0">
+    <div><span class="tag">RESULT</span><h3>Start positif: Persija menang 1–0 atas Borneo FC</h3><p>Alexander Jeremejeff mencetak gol kemenangan dan Nadeo Argawinata mencatat clean sheet di laga perdana.</p></div>
+    <div class="meta"><span>05 Sep 2026</span><a href="https://www.persija.id/media/news/syukur-nadeo-argawinata-atas-tiga-poin-di-samarinda" target="_blank">Sumber ↗</a></div>
+  </article>
+</div>
+</div>
+</section>
+
+<section id="match">
+<div class="container">
+<div class="sectionHead"><div><div class="kicker">MATCH CENTER</div><h2>Persija Match Hub</h2></div><p>Panel pertandingan yang bisa dikembangkan ke API skor live. Untuk versi single-file ini, data pertandingan ditampilkan sebagai snapshot yang diverifikasi dari sumber resmi.</p></div>
+<div class="matchHero">
+  <div class="card scoreBox">
+    <div><span class="liveBadge">MATCH SNAPSHOT</span><div class="score">PERSIJA <small style="font-size:25px;color:#777">VS</small> PERSIB</div><p style="color:#777">12 SEPTEMBER 2026 • 15:30 WIB • STADION UTAMA GBK</p></div>
+  </div>
+  <div class="card">
+    <span class="tag">PEKAN 2</span><h3 style="font-size:27px">Matchday Dashboard</h3>
+    <div class="stats">
+      <div class="stat"><b>1–0</b><span>Last result</span></div>
+      <div class="stat"><b>+3</b><span>Points</span></div>
+      <div class="stat"><b>1</b><span>Clean sheet</span></div>
+      <div class="stat"><b>STY</b><span>Coach</span></div>
+    </div>
+    <a class="btn primary" style="display:block;text-align:center;margin-top:14px" href="https://www.persija.id/" target="_blank">CHECK OFFICIAL UPDATE ↗</a>
+  </div>
+</div>
+</div>
+</section>
+
+<section id="team">
+<div class="container">
+<div class="sectionHead"><div><div class="kicker">SQUAD</div><h2>Team Spotlight</h2></div><p>Contoh kartu pemain untuk fondasi database squad. Bisa nanti diperluas menjadi seluruh skuad + filter posisi + statistik.</p></div>
+<div class="teamGrid">
+  <div class="card player"><div class="num">01</div><div class="avatar"><span class="playerSvg">GK</span></div><div class="info"><small>GOALKEEPER</small><b>Nadeo Argawinata</b></div></div>
+  <div class="card player"><div class="num">05</div><div class="avatar"><span class="playerSvg">DF</span></div><div class="info"><small>DEFENDER</small><b>Rizky Ridho</b></div></div>
+  <div class="card player"><div class="num">08</div><div class="avatar"><span class="playerSvg">MF</span></div><div class="info"><small>MIDFIELDER</small><b>Witan Sulaeman</b></div></div>
+  <div class="card player"><div class="num">09</div><div class="avatar"><span class="playerSvg">FW</span></div><div class="info"><small>FORWARD</small><b>Alexander Jeremejeff</b></div></div>
+  <div class="card player"><div class="num">10</div><div class="avatar"><span class="playerSvg">AT</span></div><div class="info"><small>ATTACKER</small><b>Stjepan Lončar</b></div></div>
+  <div class="card player"><div class="num">21</div><div class="avatar"><span class="playerSvg">DF</span></div><div class="info"><small>DEFENDER</small><b>Jordi Amat</b></div></div>
+  <div class="card player"><div class="num">70</div><div class="avatar">⚽</div><div class="info"><small>FORWARD</small><b>Gustavo Almeida</b></div></div>
+  <div class="card player"><div class="num">99</div><div class="avatar"><span class="playerSvg">FW</span></div><div class="info"><small>FORWARD</small><b>Emaxwell Souza</b></div></div>
+</div>
+</div>
+</section>
+
+<section id="jakmania">
+<div class="container">
+<div class="sectionHead"><div><div class="kicker">SUPPORTER CULTURE</div><h2>The Jakmania</h2></div><p>Ruang komunitas fan-made untuk sejarah, kultur, matchday, chant, dokumentasi, dan informasi supporter.</p></div>
+<div class="card" style="display:grid;grid-template-columns:150px 1fr;gap:25px;align-items:center">
+<img src="https://images.seeklogo.com/logo-png/43/1/the-jakmania-logo-png_seeklogo-438997.png" alt="The Jakmania" style="width:150px;height:120px;object-fit:contain;background:#fff;border-radius:15px;padding:8px">
+<div><span class="tag">THE JAKMANIA • PERSIJA FANS CLUB</span><h3 style="font-size:28px">SATU JAKARTA. SATU CINTA. PERSIJA.</h3><p style="color:#999;line-height:1.7;margin-top:8px">Gunakan bagian ini untuk menampung sejarah organisasi, korwil, dokumentasi tribun, matchday guide, koreografi, chant, dan update resmi supporter. Untuk informasi resmi, selalu rujuk kanal The Jakmania.</p><a class="btn" style="display:inline-block;margin-top:14px" href="https://www.instagram.com/infokomjakmania/" target="_blank">INSTAGRAM INFO THE JAKMANIA ↗</a></div>
+</div>
+<div class="timeline" style="margin-top:18px">
+  <div class="timelineItem"><div class="year">1928</div><div class="line"><h3>Persija lahir dari VIJ</h3><p>Sejarah Persija berawal pada 28 November 1928 dan berkembang menjadi simbol sepak bola Jakarta.</p></div></div>
+  <div class="timelineItem"><div class="year">1997</div><div class="line"><h3>The Jakmania berdiri</h3><p>Organisasi supporter Persija lahir pada 19 Desember 1997 dan berkembang menjadi komunitas besar.</p></div></div>
+  <div class="timelineItem"><div class="year">2018</div><div class="line"><h3>Gelar Liga Indonesia</h3><p>Persija menutup musim 2018 sebagai juara Liga 1, salah satu momen paling ikonik era modern.</p></div></div>
+</div>
+</div>
+</section>
+
+<section id="music">
+<div class="container">
+<div class="sectionHead"><div><div class="kicker">TRIBUN SOUND</div><h2>Music Player + Lyrics</h2></div><p>Dua track SKARBU sudah terpasang. Audio dapat diputar bergantian dengan visualizer, progress, dan kontrol yang responsif.</p></div>
+<div class="music">
+  <div class="card musicCard" id="music1">
+    <div class="musicTop"><div class="disc"></div><div><span class="tag">TRACK 01</span><h3 id="title1">Lagu Persija — URL belum diisi</h3><p>SKARBU • OUTSIDER PERSIJA</p></div></div>
+    <div class="controls"><button class="iconbtn play" onclick="toggleMusic(0)">▶</button><button class="iconbtn" onclick="stopMusic(0)">■</button></div>
+    <div class="progress"><div class="bar" id="bar0"></div></div>
+    <div class="lyrics" id="lyrics1">Lirik belum tersedia pada sumber yang diberikan.</div>
+  </div>
+  <div class="card musicCard" id="music2">
+    <div class="musicTop"><div class="disc"></div><div><span class="tag">TRACK 02</span><h3 id="title2">Lagu The Jakmania — URL belum diisi</h3><p>SKARBU • DEWI FORTUNA</p></div></div>
+    <div class="controls"><button class="iconbtn play" onclick="toggleMusic(1)">▶</button><button class="iconbtn" onclick="stopMusic(1)">■</button></div>
+    <div class="progress"><div class="bar" id="bar1"></div></div>
+    <div class="lyrics" id="lyrics2">Lirik belum tersedia pada sumber yang diberikan.</div>
+  </div>
+</div>
+</div>
+</section>
+
+<section id="social">
+<div class="container">
+<div class="sectionHead"><div><div class="kicker">CONNECT</div><h2>Social Hub</h2></div><p>Link resmi Persija, The Jakmania, dan kanal personal lu.</p></div>
+<div class="social">
+<a class="card" href="https://www.instagram.com/persija/" target="_blank"><div class="socialIcon">IG</div><div><b>Persija Jakarta</b><p style="color:#777;font-size:12px;margin-top:3px">@persija • official</p></div></a>
+<a class="card" href="https://www.instagram.com/infokomjakmania/" target="_blank"><div class="socialIcon">JK</div><div><b>Infokom The Jakmania</b><p style="color:#777;font-size:12px;margin-top:3px">@infokomjakmania</p></div></a>
+<a class="card" href="https://www.instagram.com/lanzz.offcl" target="_blank"><div class="socialIcon">LZ</div><div><b>Lanzz</b><p style="color:#777;font-size:12px;margin-top:3px">@lanzz.offcl • creator</p></div></a>
+</div>
+</div>
+</section>
+
+<section id="features">
+<div class="container">
+<div class="sectionHead"><div><div class="kicker">FAN PORTAL OS</div><h2>Command Center</h2></div><p>Dashboard interaktif untuk navigasi cepat, mode visual, musik tribun, pencarian, dan update.</p></div>
+<div class="grid">
+  <div class="card"><span class="tag">LIVE</span><h3>Auto Clock WIB</h3><p style="color:#999;line-height:1.6;margin-top:8px">Jam Jakarta berjalan real-time dan menyesuaikan perangkat.</p></div>
+  <div class="card"><span class="tag">UX</span><h3>Smart Search</h3><p style="color:#999;line-height:1.6;margin-top:8px">Cari cepat berita dan konten portal dengan filter instan.</p></div>
+  <div class="card"><span class="tag">VISUAL</span><h3>FX Mode</h3><p style="color:#999;line-height:1.6;margin-top:8px">Partikel, glow, reveal animation, tilt card, dan ambient pointer.</p></div>
+</div>
+</div>
+</section>
+</main>
+
+<footer>
+<div class="container footerGrid">
+<div><div class="credit">© 2026 <span class="gold">Lanzz</span> — Persija × The Jakmania Fan Portal.</div><div style="margin-top:7px">Fan-made / unofficial project. Persija, The Jakmania, logos, names and related marks belong to their respective owners.</div></div>
+<div>Built with HTML • CSS • JavaScript • <span class="liveDataBadge">AUTO UPDATE ENABLED</span></div>
+</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<button id="topBtn" onclick="scrollTo({top:0,behavior:'smooth'})"><span class="svgIcon">↑</span></button>
+
+<script>
+const audioConfig=[
+ {url:"https://files.catbox.moe/qn6eem.mp3",title:"SKARBU — OUTSIDER PERSIJA",lyrics:"OUTSIDER PERSIJA — lirik belum disediakan."},
+ {url:"https://files.catbox.moe/lpmgya.mp3",title:"SKARBU — DEWI FORTUNA",lyrics:"DEWI FORTUNA — lirik belum disediakan."}
+];
+const audios=[new Audio(),new Audio()];
+audios.forEach((a,i)=>{a.preload="metadata";a.addEventListener("timeupdate",()=>{const p=a.duration?(a.currentTime/a.duration)*100:0;document.getElementById("bar"+i).style.width=p+"%";});a.addEventListener("ended",()=>document.getElementById("music"+(i+1)).classList.remove("playing"));});
+function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2200)}
+function toggleMusic(i){
+ const a=audios[i];
+ if(!audioConfig[i].url){toast("URL musik "+(i+1)+" belum diisi.");return}
+ audios.forEach((o,j)=>{if(j!==i){o.pause();document.getElementById("music"+(j+1)).classList.remove("playing")}});
+ if(a.paused){a.play();document.getElementById("music"+(i+1)).classList.add("playing")}else{a.pause();document.getElementById("music"+(i+1)).classList.remove("playing")}
+}
+function stopMusic(i){audios[i].pause();audios[i].currentTime=0;document.getElementById("bar"+i).style.width="0%";document.getElementById("music"+(i+1)).classList.remove("playing")}
+function setupAudio(){
+ audioConfig.forEach((c,i)=>{if(c.url){audios[i].src=c.url;document.getElementById("title"+(i+1)).textContent=c.title;document.getElementById("lyrics"+(i+1)).textContent=c.lyrics}})
+}
+setupAudio();
+
+const months=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+const days=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+function tick(){
+ const n=new Date(),fmt=new Intl.DateTimeFormat("id-ID",{timeZone:"Asia/Jakarta",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false});
+ document.getElementById("clock").textContent=fmt.format(n)+" WIB";
+ const parts=new Intl.DateTimeFormat("id-ID",{timeZone:"Asia/Jakarta",weekday:"long",day:"2-digit",month:"long",year:"numeric"}).format(n);
+ document.getElementById("date").textContent=parts;
+ const target = window.__nextMatchDate ? new Date(window.__nextMatchDate) : new Date("2026-09-12T15:30:00+07:00"), d=target-n;
+ const el=document.getElementById("countdown");
+ if(d>0){let s=Math.floor(d/1000),h=Math.floor(s/3600);s%=3600;let m=Math.floor(s/60);s%=60;el.textContent=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;}
+ else el.textContent="MATCH TIME PASSED";
+}
+setInterval(tick,1000);tick();
+
+function filterCards(){const q=document.getElementById("search").value.toLowerCase();document.querySelectorAll("#newsGrid .newsCard").forEach(c=>c.style.display=c.dataset.search.includes(q)?"flex":"none")}
+function resetSearch(){document.getElementById("search").value="";filterCards()}
+let fx=true;
+function toggleEffects(){fx=!fx;document.documentElement.style.setProperty("--line",fx?"rgba(255,255,255,.09)":"rgba(255,255,255,.04)");toast(fx?"Visual effects ON":"Visual effects reduced")}
+window.addEventListener("scroll",()=>document.getElementById("topBtn").style.display=scrollY>500?"block":"none");
+
+// ===== TOTAL INTERACTION UPGRADE =====
+const ambient=document.getElementById("ambient");
+document.addEventListener("pointermove",e=>{
+  const x=(e.clientX/innerWidth*100).toFixed(1), y=(e.clientY/innerHeight*100).toFixed(1);
+  ambient.style.setProperty("--mx",x+"%"); ambient.style.setProperty("--my",y+"%");
+});
+document.querySelectorAll(".card").forEach(card=>{
+  card.classList.add("reveal");
+  card.addEventListener("pointermove",e=>{
+    if(matchMedia("(max-width:900px)").matches)return;
+    const r=card.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
+    const rx=((y/r.height)-.5)*-4, ry=((x/r.width)-.5)*4;
+    card.style.transform=`translateY(-4px) perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+  card.addEventListener("pointerleave",()=>card.style.transform="");
+});
+const observer=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add("visible")}),{threshold:.08});
+document.querySelectorAll(".reveal").forEach(e=>observer.observe(e));
+
+// Progress bar click-to-seek
+document.querySelectorAll(".progress").forEach((p,i)=>{
+  p.addEventListener("click",e=>{
+    const a=audios[i]; if(!a.duration)return;
+    const r=p.getBoundingClientRect(); a.currentTime=((e.clientX-r.left)/r.width)*a.duration;
+  });
+});
+
+// Better play button state
+audios.forEach((a,i)=>{
+  a.addEventListener("play",()=>document.querySelector("#music"+(i+1)+" .play").textContent="Ⅱ");
+  a.addEventListener("pause",()=>document.querySelector("#music"+(i+1)+" .play").textContent="▶");
+  a.addEventListener("loadedmetadata",()=>toast("Audio siap: "+audioConfig[i].title));
+});
+
+// Keyboard shortcuts
+document.addEventListener("keydown",e=>{
+  if(e.target.matches("input,textarea"))return;
+  if(e.code==="Space"){e.preventDefault();toggleMusic(0)}
+  if(e.key==="Escape"){window.scrollTo({top:0,behavior:"smooth"})}
+});
+
+// Lightweight red/gold particle field
+const canvas=document.getElementById("particleCanvas"),ctx=canvas.getContext("2d");
+let pts=[], W=0,H=0;
+function resizeCanvas(){W=canvas.width=innerWidth*devicePixelRatio;H=canvas.height=innerHeight*devicePixelRatio;canvas.style.width=innerWidth+"px";canvas.style.height=innerHeight+"px";ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+function initParticles(){pts=Array.from({length:70},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.8+.4,v:(Math.random()-.5)*.18,o:Math.random()*.55+.1}))}
+function drawParticles(){
+ ctx.clearRect(0,0,innerWidth,innerHeight);
+ pts.forEach(p=>{p.y-=.15;p.x+=p.v;if(p.y<-10)p.y=innerHeight+10;if(p.x>innerWidth+10)p.x=-10;if(p.x<-10)p.x=innerWidth+10;
+   ctx.globalAlpha=p.o;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=Math.random()>.82?"#e8bd62":"#e30613";ctx.fill();
+ });
+ requestAnimationFrame(drawParticles)
+}
+resizeCanvas();initParticles();drawParticles();addEventListener("resize",()=>{resizeCanvas();initParticles()});
+
+// Smooth active nav state
+const sections=[...document.querySelectorAll("main section[id]")], navLinks=[...document.querySelectorAll(".links a")];
+const navObs=new IntersectionObserver(es=>es.forEach(e=>{
+ if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+e.target.id))}
+}),{rootMargin:"-35% 0px -55% 0px"});
+sections.forEach(s=>navObs.observe(s));
+
+
+// ===== AUTO UPDATE ENGINE =====
+// The static HTML remains usable offline; when data.json is available (GitHub Pages,
+// Cloudflare Pages, Netlify, etc.), news + matches are refreshed automatically.
+let autoData = null;
+async function loadAutoData(force=false){
+  const status = document.getElementById("autoStatus");
+  try{
+    const url = `data.json?ts=${Date.now()}`;
+    const res = await fetch(url, {cache:"no-store"});
+    if(!res.ok) throw new Error("data.json HTTP "+res.status);
+    autoData = await res.json();
+    renderAutoNews(autoData.news || []);
+    renderAutoMatch(autoData.matches || []);
+    if(autoData.updated_at){
+      status.textContent = "Live • terakhir sinkron " + new Date(autoData.updated_at).toLocaleString("id-ID");
+    }else{
+      status.textContent = "Live • data tersinkron";
+    }
+  }catch(err){
+    status.textContent = "Mode fallback • data live belum tersedia";
+  }
+}
+function renderAutoNews(items){
+  const grid=document.getElementById("newsGrid");
+  if(!grid || !items.length) return;
+  grid.innerHTML=items.slice(0,9).map(n=>{
+    const title=(n.title||"Update Persija").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    const summary=(n.summary||"Berita terbaru Persija.").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    const date=n.date ? new Date(n.date).toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"}) : "";
+    const href=n.url||"https://www.persija.id/";
+    const tag=(n.tag||"NEWS").replace(/</g,"&lt;");
+    return `<article class="card newsCard" data-search="${(title+" "+summary+" "+tag).toLowerCase()}">
+      <div><span class="tag">${tag}</span><h3>${title}</h3><p>${summary}</p></div>
+      <div class="meta"><span>${date}</span><a href="${href}" target="_blank" rel="noopener">Sumber ↗</a></div>
+    </article>`;
+  }).join("");
+  filterCards();
+}
+function renderAutoMatch(matches){
+  if(!matches.length) return;
+  const now=Date.now();
+  const future=matches.filter(m=>m.timestamp*1000>now).sort((a,b)=>a.timestamp-b.timestamp);
+  const next=future[0];
+  const last=matches.filter(m=>m.timestamp*1000<=now).sort((a,b)=>b.timestamp-a.timestamp)[0];
+  if(next){
+    window.__nextMatchDate = new Date(next.timestamp*1000).toISOString();
+    const label = new Date(next.timestamp*1000).toLocaleString("id-ID",{day:"2-digit",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Jakarta"});
+    const hero = document.querySelector(".nextCard > div:last-child");
+    if(hero) hero.textContent = `${label} WIB • ${next.venue || "Venue TBA"}`;
+    const score = document.querySelector(".scoreBox .score");
+    if(score) score.innerHTML = `${next.home} <small style="font-size:25px;color:#777">VS</small> ${next.away}`;
+  }
+  if(last){
+    const stat = document.querySelector(".stats .stat b");
+    if(stat && last.home_score!=null && last.away_score!=null) stat.textContent=`${last.home_score}–${last.away_score}`;
+  }
+  tick();
+}
+function forceAutoUpdate(){ loadAutoData(true); toast("Menyegarkan data…"); }
+loadAutoData();
+setInterval(loadAutoData, 5*60*1000);
+
+async function loadJson(url){
+  const r=await fetch(url+"?ts="+Date.now(),{cache:"no-store"});
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  return r.json();
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+function renderLiveDashboard(d){
+  const lm=document.getElementById("liveMatch"), sb=document.getElementById("standingsBody"), sc=document.getElementById("scorers"), fs=document.getElementById("formStrip"), ls=document.getElementById("liveState");
+  if(!lm||!sb||!sc||!fs) return;
+  const e=d.live_event;
+  if(e){
+    const hs=e.home_score ?? "-", as=e.away_score ?? "-";
+    lm.innerHTML=`<div class="liveScore"><div><div class="liveTeam">${esc(e.home)}</div></div><div><div class="liveScoreNum">${hs} : ${as}</div><div class="liveStatus">${esc(e.status_text||"Match")}</div></div><div><div class="liveTeam">${esc(e.away)}</div></div></div>
+      <div class="eventStats">${(e.stats||[]).slice(0,4).map(x=>`<div class="eventStat"><b>${esc(x.value)}</b>${esc(x.label)}</div>`).join("")}</div>`;
+    ls.textContent=e.is_live?"● LIVE":"MATCH";
+  }else{
+    lm.innerHTML='<div class="muted">Tidak ada pertandingan yang sedang live.</div>';
+    ls.textContent="IDLE";
+  }
+  const rows=(d.standings||[]).slice(0,10);
+  sb.innerHTML=rows.map(r=>`<tr class="${r.team_id===64295?"persija":""}"><td>${r.position}</td><td>${esc(r.team)}</td><td>${r.matches}</td><td>${r.gd>0?"+":""}${r.gd}</td><td><b>${r.points}</b></td></tr>`).join("") || '<tr><td colspan="5">Belum tersedia</td></tr>';
+  sc.innerHTML=(d.scorers||[]).slice(0,5).map((p,i)=>`<div class="scorer"><span><span class="muted">${i+1}.</span> <span class="scorerName">${esc(p.name)}</span></span><span class="scorerGoals">${p.goals}</span></div>`).join("") || '<div class="muted">Belum tersedia</div>';
+  fs.innerHTML=(d.form||[]).slice(-5).map(x=>`<span class="formPill" title="${esc(x.opponent)}">${esc(x.result)}</span>`).join("") || '<span class="muted">Belum tersedia</span>';
+}
+async function loadAdvancedData(){
+  try{
+    const d=await loadJson("advanced.json");
+    renderLiveDashboard(d);
+  }catch(e){
+    // Keep the portal usable if advanced data is temporarily unavailable.
+  }
+}
+loadAdvancedData();
+setInterval(loadAdvancedData, 60*1000);
+</script>
+</body>
+</html>
