@@ -1,0 +1,40 @@
+{
+  "updated_at": "2026-09-12T00:00:00Z",
+  "source": {
+    "news": "https://www.persija.id/all-news",
+    "matches": "https://www.sofascore.com/football/team/persija-jakarta/64295"
+  },
+  "news": [
+    {
+      "title": "PERSIJA BERSAMA IVAN MAMUT SIAP HADAPI TANTANGAN SUPER LEAGUE 2026/2027",
+      "summary": "Ivan Mamut resmi menjadi bagian Persija untuk menghadapi tantangan Super League 2026/2027.",
+      "date": "2026-09-10",
+      "url": "https://www.persija.id/media/news/persija-bersama-ivan-mamut-siap-hadapi-tantangan-super-league-20262027",
+      "tag": "SQUAD"
+    },
+    {
+      "title": "TEKAD PERSIJA HADIRKAN VERSI TERBAIKNYA UNTUK HADAPI PEKAN KEDUA",
+      "summary": "Persija mempersiapkan laga kontra Persib di SUGBK pada 12 September 2026.",
+      "date": "2026-09-09",
+      "url": "https://www.persija.id/media/news/tekad-persija-hadirkan-versi-terbaiknya-untuk-hadapi-pekan-kedua",
+      "tag": "MATCHDAY"
+    },
+    {
+      "title": "SHIN TAE-YONG INGATKAN ARTI DUKUNGAN DI LAGA PERSIJA VS PERSIB",
+      "summary": "Shin Tae-yong menekankan dukungan suporter yang tertib saat pertandingan.",
+      "date": "2026-09-09",
+      "url": "https://www.persija.id/media/news/shin-tae-yong-ingatkan-arti-dukungan-di-laga-persija-vs-persib",
+      "tag": "MATCHDAY"
+    }
+  ],
+  "matches": [
+    {
+      "timestamp": 1789201800,
+      "home": "Persija Jakarta",
+      "away": "Persib Bandung",
+      "home_score": null,
+      "away_score": null,
+      "venue": "Stadion Utama Gelora Bung Karno"
+    }
+  ]
+}
